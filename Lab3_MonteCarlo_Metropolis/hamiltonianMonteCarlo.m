@@ -67,10 +67,10 @@ function [X_stored, X_term, numAccepted, T] = hamiltonianMonteCarlo(findE, findG
         
         % (3) Decide whether to accept / reject: 
         
-        if deltaHamiltonian < 0
+        if deltaHamiltonian < 0 % first proposal
             accept = 1;
             % if the random uniform Unif(0,1) sampled number is less than exp ...
-        elseif rand() < exp( - deltaHamiltonian)
+        elseif rand() < exp( - deltaHamiltonian) % second proposal: always accepted (??)
             accept = 1; 
         else 
             accept = 0;
