@@ -6,7 +6,7 @@
 % sigma_k = the covariance matrix for the kth Gaussian
 % PI_k = the mixing probability for the kth gaussian
 % X = data matrix
-function [] = EMAlgoGaussianMixture(X)
+function [mu, sigma] = EMAlgoGaussianMixture_1(X)
 
     % (1) Initialize the vector of means, covariance matrix, and prior
     % probabilities for all K=2 components (all K=2 gaussian mixtures)

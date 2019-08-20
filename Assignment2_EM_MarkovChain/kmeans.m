@@ -12,11 +12,10 @@
 %%% X = data matrix, is N x D matrix, where each predictor x1, x2, .. xD is
 %%% along the column and each predictor has N observations (along the rows)
 
-function [means, resp, distance] = kmeans(K, X)
+% OUTPUT: N x D matrix of means. 
+function [means] = kmeans(K, X)
 
     %%%% KMEANS Algorithm %%%%
-    % The Simple perceptron version
-
 
     % define the distance function
     dist = @(x,y) (1/2) * sum(( x - y) .^2);
@@ -65,7 +64,7 @@ function [means, resp, distance] = kmeans(K, X)
             % The rest of the locations shall be 0, since r_kn = 1 if k
             % =k-hat and 0 if k != k-hat
             resp(n, k) = 1;  
-            % VIEW: resp is NxK matrix with one 1 per row, rest is zeroes. 
+            % note: resp is NxK matrix with one 1 per row, rest is zeroes. 
         end
 
         % (3) Update step: model parameters are adjusted to match
