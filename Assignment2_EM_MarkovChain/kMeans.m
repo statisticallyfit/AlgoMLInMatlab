@@ -12,8 +12,9 @@
 %%% X = data matrix, is N x D matrix, where each predictor x1, x2, .. xD is
 %%% along the column and each predictor has N observations (along the rows)
 
-% OUTPUT: N x D matrix of means. 
-function [means] = kmeans(K, X)
+% OUTPUT: K x D matrix of means: there is a vector of means of length D
+% along each of the K cluster rows. So there is a mean vector per cluster. 
+function [means] = kMeans(K, X)
 
     %%%% KMEANS Algorithm %%%%
 
@@ -58,7 +59,7 @@ function [means] = kmeans(K, X)
                 distance(j) = dist(means(j, :), X(n, 1:D));
             end 
 
-            [val, k] = min(distance);  % et k = index of min element in distance vector
+            [minDist, k] = min(distance);  % et k = index of min element in distance vector
             
             % Assign one since k is assigned to be the same as k-hat = argmin
             % The rest of the locations shall be 0, since r_kn = 1 if k
@@ -73,7 +74,8 @@ function [means] = kmeans(K, X)
         
         %stepmeans = means;
         for k = 1:K % for cluster k ...
-            for d = 1:D % for dimension d... % Sum the rows on col k of responsibilities * predictor d + 1       
+            for d = 1:D % for dimension d... 
+                % Sum the rows on col k of responsibilities * predictor d + 1       
                  % keeping only X row elments with nonzero
                  % responsibilities. 
                 means(k, d) = sum(  resp(:, k) .* X(:, d)  ); % data(:, d+1));
