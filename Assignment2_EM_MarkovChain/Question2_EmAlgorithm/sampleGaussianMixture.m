@@ -1,21 +1,20 @@
 %%% D = dimension of each Gaussian, the number of variables per
 % multivariate Gaussian distribution Xd, in the vector X = (X1, ... XD)
 %%% K = number of clusters, or number of Guassians in the mixture. 
-%%% pi = mixture probabilities in the gaussian mixture pdf, length(pi) = k
+%%% PI = mixture probabilities in the gaussian mixture pdf, length(pi) = k
 %%% p = the gaussian mixture pdf formula
 %%% SIGMAs = cell array containing the D x D covariance matrices of each gaussian.
 % So the kth SIGMA matrix corresponds to the SIGMA matrix of the kth
 % Gaussian. 
-%%% MUs = cell array containg the 1 xD MU  vectors of each gaussian. 
+%%% MUs = cell array containg the 1 x D MU  vectors of each gaussian. 
 
 % X = resulting N x D matrix of samples from the gaussian mixture. 
-function [X] = sampleGaussianMixture(N, MUs, SIGMAs)
+function [X] = sampleGaussianMixture(N, MUs, SIGMAs, PI)
     
     D = length(MUs{1});
     K = length(MUs);
     
     % Generate N samples
-    %N = 1000;
     X = zeros(N, D); % N x D matrix, one col per dimension
     % so rowwise ,it is one sample of dimension D 
     
@@ -25,7 +24,7 @@ function [X] = sampleGaussianMixture(N, MUs, SIGMAs)
         % sample from Unif(0,1)
         unifNum = rand; 
         % find the k
-        k = min(find(unifNum < cumsum(pi)));
+        k = min(find(unifNum < cumsum(PI)));
 
         % Step 2: sample x-value from multivariate gaussian
         % that has the corresponding parameters, muk, sigmak
