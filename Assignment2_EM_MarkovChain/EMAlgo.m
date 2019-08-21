@@ -95,4 +95,48 @@ function EMAlgo(mu1, mu2, sigma1, sigma2, phi)
     % (3) MAXIMIZATION STEP: 
     % Re-estimate the parameters using the current responsibilities. 
     
+    % store the current means
+    oldMU = MU;  
+    
+    % Calculate the new prior probabilities 
+    Nk = sum(resp, 1); % sum along the columns (vertically) => (1 x K)
+    phi = Nk / N; % 1 x K
+    
+    % Calculate new means for each cluster
+    %newMeans = (transpose(resp) * X)
+    
+    for k = 1 : K
+
+        % Calculate the prior probability for cluster 'j'.
+        %pi(k) = mean(resp(:, k), 1);
+
+        % Calculate the new mean for cluster 'j' by taking the weighted
+        % average of all data points.
+        % MU(k, :) = ...
+        MU{k} = (transpose(resp(:, k)) * X) ./ sum(resp(:, k), 1);  %weightedAverage(resp(:, k), X);
+
+        % Calculate the covariance matrix for cluster 'k' by taking the 
+        % weighted average of the covariance for each training example. 
+
+        sigma_k = zeros(D, D);
+
+        % Subtract the cluster row mean vector from all data points.
+        Xm = X - MU{k}; % bsxfun(@minus, X, MU(k, :)); % applies minus elementwise  to X. 
+
+        % Calculate the contribution of each training example to the covariance matrix.
+        %for (n = 1 : N)
+        %    sigma_k = sigma_k + (resp(n, k) .* (Xm(n, :)' * Xm(n, :)));
+        %end
+        % Divide by the sum of weights.
+        %sigma{k} = sigma_k ./ sum(resp(:, k));
+        
+        SIGMA{k} = (  (resp(:, k) .* Xm)' * Xm) / sum(resp, 1); 
+    end
+
+    % Check for convergence.
+    if (mu == prevMu)
+        break
+    end
+        
+    
 end
