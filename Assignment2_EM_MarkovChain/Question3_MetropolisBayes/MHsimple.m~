@@ -4,6 +4,7 @@
 function [X,acc] = MHsimple
     % parameters
     burnin = 0; % number of burn-in iterations
+    % burn in = T >= (L / e)^2 = 
     lag = 1; % iterations between successive samples
     nsamp = 1000; % number of samples to draw
     sig = 50; % standard deviation of Gaussian proposal
