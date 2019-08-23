@@ -12,14 +12,10 @@
 % X = the markov chain sequence (samples) from the target distribution. 
 % X represents the samples from the posterior, P = P* / Z
 
-function [X] = MetropolisSampling(N, L, proposalWidth, xInit, Pstar)
-
-    % The burn in is the lower bound of number of iterations needed to
-    % generated independent samples, since markov chains generate
-    % sequentially dependent samples. 
+function [X] = MetropolisSampling(N, L, proposalWidth, Pstar)
+    % parameters
+    %burnin = 0; % number of burn-in iterations
     burnin = (L / proposalWidth)^2;
-
-    % After burnin, generate N samples. 
     T = N + burnin; 
     
     % Proposal distribution with current mean and proposal width (sigma)
@@ -31,13 +27,13 @@ function [X] = MetropolisSampling(N, L, proposalWidth, xInit, Pstar)
     % Let first current mean be 0.5 since any beta distribution, and hence
     % the posterior, have x-values between 0 and 1. Let the first xInit
     % be midway between 0 and 1. 
-    %xInit = 0.5; 
+    xInit = 0.5; 
     
     % Sample the proposal distribution
     X(1) = sampleProposalQ(xInit, proposalWidth); 
     
     % Generate N uniform random numbers. 
-    u = rand(1, T); 
+    u = rand(1, N); 
     
     % Metropolis Routine
     for t = 1:T-1
@@ -56,8 +52,7 @@ function [X] = MetropolisSampling(N, L, proposalWidth, xInit, Pstar)
     
     
     % TODO must pick out every Mth sample to get every independent samples.
-    % Step 1: keep the samples after the burnin
-    X = X(burnin + 1:end);
+    % 
     
 end
 

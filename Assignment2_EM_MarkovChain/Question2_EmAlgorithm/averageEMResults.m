@@ -42,8 +42,8 @@ function [avgMU, avgSIGMA, avgPI] = averageEMResults(B, givenMUs, givenSIGMAs, N
          X = sampleGaussianMixture(N, givenMUs, givenSIGMAs, phi); 
 
         %% Step 2: do the EM algorithm
-        [MU, SIGMA, PI] = EMAlgo(X, phi, K);
-        %[MU, SIGMA, PI] = EMAlgoGaussianMixture_1(X, phi, K);
+        %[MU, SIGMA, PI] = EMAlgo(X, phi, K);
+        [MU, SIGMA, PI] = EMAlgoGaussianMixture_1(X, phi, K);
         %[Mu, Sigma, Pi] = EMAlgoGaussianMixture_1(X, phi);
         
         allMUs{iter} = MU;

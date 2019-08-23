@@ -41,7 +41,7 @@ function [mu, sigma, phi] = EMAlgoGaussianMixture_1(X, phi, K)
     resp = zeros(N, K);
 
     % Loop until convergence.
-    for (iter = 1:1000)
+    for (iter = 1:100)
 
         %fprintf('  EM Iteration %d\n', iter);
 
