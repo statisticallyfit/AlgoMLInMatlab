@@ -2,7 +2,7 @@
 %% theta = the parameter of the likelihood
 %%% X = the lifetime random variable of the electronic component
 
-function plotLifetimeLikelihood(x)
+function plotLifetimeLikelihood(x, thetaMin, thetaMax, color)
 
     % likelihood function as a function of theta (t)
     % so x = fixed
@@ -13,11 +13,13 @@ function plotLifetimeLikelihood(x)
         %p = 0;
     end
     
-    figure(1); clf
+    figure(1); 
     % Generate theta values
-    thetas = 0 : 0.01 : 100; 
+    thetas = thetaMin : 0.01 : thetaMax; 
     %lambdas = 0 : 0.01 : 100; 
-    plot(thetas, lik(thetas), 'b', 'LineWidth', 2)
+    plot(thetas, lik(thetas), 'b', 'LineWidth', 2, 'Color', color)
     %plot(lambdas, lik(lambdas), 'b', 'LineWidth', 2)
+    
+    
     
 end
