@@ -20,22 +20,29 @@
 
 %%% PI = the 1 x K matrix of mixing coefficients, optimized by the
 %%% algorithm. 
-function [MU, SIGMA, PI, X] = EMAlgo(mu1, mu2, sigma1, sigma2, N, phi)
 
-    %% Step 1: generate sample of size N from mixture of two bivariate
-    % Gaussians. 
+
+ 
+function [X] = drawSampleFromTwoBivariateGaussians(mu1, mu2, sigma1, sigma2, N, phi)
+
     rng('default') % reproducible
     
     D = 2; 
     K = 2; 
-    B = 100; % number of iterations
     
     PI = phi; 
     givenMUs = {mu1, mu2};
     givenSIGMAs = {sigma1, sigma2};
     
     X = sampleGaussianMixture(N, givenMUs, givenSIGMAs, PI); 
+end
+
+
+function [MU, SIGMA, PI, X] = EMAlgo(mu1, mu2, sigma1, sigma2, N, phi)
+
     
+    %% Step 1: generate sample of size N from mixture of two bivariate Gaussians.
+    X = drawSampleFromTwoBivariateGaussians(mu1, mu2, sigma1, sigma2, N, phi);
     
     %% Step 2: do the EM algorithm
     
@@ -70,8 +77,8 @@ function [MU, SIGMA, PI, X] = EMAlgo(mu1, mu2, sigma1, sigma2, N, phi)
     
     
     % Repeat until no change in means.
-    for iter = 1:B
-    %while (sum(sum(abs(MU - oldMU))) > 1e-2)
+    %for iter = 1:B
+    while (sum(sum(abs(MU - oldMU))) > 1e-2)
         % (2) EXPECTATION STEP: 
     
         % evaluate the responsibilities using the current parameter values.
