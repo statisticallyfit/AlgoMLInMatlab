@@ -21,7 +21,7 @@ function [mu, sigma, phi] = EMAlgoGaussianMixture_1(X, phi)
     indeces = randperm(N);
     mu = X(indeces(1:K), :);
 
-    sigma = [];
+    sigma = cell(K, 1);
 
     % Use the overall covariance of the dataset as the initial variance for each cluster.
     for (k = 1 : K)

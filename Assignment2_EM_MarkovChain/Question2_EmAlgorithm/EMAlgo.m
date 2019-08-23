@@ -14,15 +14,10 @@
 % PI = the 1 x K matrix of mixing coefficients, optimized by the
 % algorithm. 
 
-function [MU, SIGMA, PI] = EMAlgo(X, PI)
+function [MU, SIGMA, PI] = EMAlgo(X, PI, K)
 
-    %D = size(MU, 2); 
-    %K = size(MU, 1);
-    %N = size(X, 1);
     N = size(X, 1);
-    K = 2; 
-    D = 2;
-    
+    D = size(X, 2);
     
     % (1) INITIALIZATION: 
     
@@ -35,8 +30,7 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI)
     %MU = cell(K, 1);
     SIGMA = cell(K, 1);
     
-    
-    oldMU = zeros(K, D);
+   
     
     for k = 1:K
         % Get the row indices for which the cluster label matches current cluster k
@@ -52,6 +46,7 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI)
     % Repeat until no change in means.
     
     numIters = 0; % keep track of how many iterations it takes to achieve tolerance.
+    oldMU = zeros(K, D); 
     
     while (sum(sum(abs(MU - oldMU))) > 1e-2)
         % (2) EXPECTATION STEP: 
