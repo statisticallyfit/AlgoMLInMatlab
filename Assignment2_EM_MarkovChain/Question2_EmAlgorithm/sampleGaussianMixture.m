@@ -13,23 +13,19 @@ function [X] = sampleGaussianMixture(N, MUs, SIGMAs, PI)
     
     D = length(MUs{1});
     K = length(MUs);
-    % = zeros(N, 1);
     
     % Generate N samples
-    X = zeros(N, D); % N x D matrix, one col per dimension
-    % so rowwise ,it is one sample of dimension D 
+    X = zeros(N, D); % N x D matrix
     
     for n = 1:N
         
         % Step 1: sample k from mixtures probs (pi)
         % sample from Unif(0,1)
         unifNum = rand; 
-        % find the k
         k = min(find(unifNum < cumsum(PI)));
-        %ks(n) = k;
 
         % Step 2: sample x-value from multivariate gaussian
         % that has the corresponding parameters, muk, sigmak
-        X(n, :) = mvnrnd(MUs{k}, SIGMAs{k}); % placing into row
+        X(n, :) = mvnrnd(MUs{k}, SIGMAs{k}); % placing into row n
     end
 end

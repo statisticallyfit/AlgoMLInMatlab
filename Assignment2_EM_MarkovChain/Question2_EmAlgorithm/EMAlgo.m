@@ -101,9 +101,9 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI, K)
             MU(k, :) = (resp(:, k)' * X) ./ sum(resp(:, k), 1);  %weightedAverage(resp(:, k), X);
 
             %MU{k} = (transpose(resp(:, k)) * X) ./ sum(resp(:, k), 1);
-            fprintf('k = %d \n', k);
-            disp('mu_k');
-            disp(MU(k, :));
+            %fprintf('k = %d \n', k);
+            %disp('mu_k');
+            %disp(MU(k, :));
             
             % Calculate the covariance matrix for cluster 'k' by taking the 
             % weighted average of the covariance for each training example. 
