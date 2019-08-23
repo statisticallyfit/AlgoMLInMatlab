@@ -4,9 +4,9 @@
 % K = 2 = number of clusters = number of bivariate Guassians
 % mu_k = the mean vector for the kth Gaussian 
 % sigma_k = the covariance matrix for the kth Gaussian
-% PI_k = the mixing probability for the kth gaussian
+% phi_k = the mixing probability for the kth gaussian
 % X = data matrix
-function [mu, sigma] = EMAlgoGaussianMixture_1(X)
+function [mu, sigma, phi] = EMAlgoGaussianMixture_1(X, phi)
 
     % (1) Initialize the vector of means, covariance matrix, and prior
     % probabilities for all K=2 components (all K=2 gaussian mixtures)
@@ -29,7 +29,7 @@ function [mu, sigma] = EMAlgoGaussianMixture_1(X)
     end
 
     % Assign equal prior probabilities to each cluster.
-    pi = ones(1, K) * (1 / K);
+    %phi = ones(1, K) * (1 / K);
     
     
 
@@ -43,7 +43,7 @@ function [mu, sigma] = EMAlgoGaussianMixture_1(X)
     % Loop until convergence.
     for (iter = 1:1000)
 
-        fprintf('  EM Iteration %d\n', iter);
+        %fprintf('  EM Iteration %d\n', iter);
 
         %%% E step: Expectation: 
         % Calculate the probability for each data point for each distribution.
@@ -64,7 +64,7 @@ function [mu, sigma] = EMAlgoGaussianMixture_1(X)
         %    pdf  [m  x  k]
         %    phi  [1  x  k]   
         %  pdf_w  [m  x  k]
-        numerator = bsxfun(@times, pdf, pi); % this is the numerator of the responsibilities expression.
+        numerator = bsxfun(@times, pdf, phi); % this is the numerator of the responsibilities expression.
 
         % Divide the weighted probabilities by the sum 
         % of weighted probabilities for each cluster.
@@ -80,13 +80,13 @@ function [mu, sigma] = EMAlgoGaussianMixture_1(X)
 
         % For each of the clusters...
        % Nk = sum(resp);
-        %PI = Nk / N; 
+        %phi = Nk / N; 
        % MU = (transpose(resp) * X) ./ transpose(Nk);
        % SIGMA = resp' * 
         for (k = 1 : K)
 
             % Calculate the prior probability for cluster 'j'.
-            pi(k) = mean(resp(:, k), 1);
+            phi(k) = mean(resp(:, k), 1);
 
             % Calculate the new mean for cluster 'j' by taking the weighted
             % average of all data points.

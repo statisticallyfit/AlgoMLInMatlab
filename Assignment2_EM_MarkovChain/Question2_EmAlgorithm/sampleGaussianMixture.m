@@ -9,10 +9,11 @@
 %%% MUs = cell array containg the 1 x D MU  vectors of each gaussian. 
 
 % X = resulting N x D matrix of samples from the gaussian mixture. 
-function [X] = sampleGaussianMixture(N, MUs, SIGMAs, PI)
+function [X, ks] = sampleGaussianMixture(N, MUs, SIGMAs, PI)
     
     D = length(MUs{1});
     K = length(MUs);
+    ks = zeros(N, 1);
     
     % Generate N samples
     X = zeros(N, D); % N x D matrix, one col per dimension
@@ -25,6 +26,7 @@ function [X] = sampleGaussianMixture(N, MUs, SIGMAs, PI)
         unifNum = rand; 
         % find the k
         k = min(find(unifNum < cumsum(PI)));
+        ks(n) = k;
 
         % Step 2: sample x-value from multivariate gaussian
         % that has the corresponding parameters, muk, sigmak
