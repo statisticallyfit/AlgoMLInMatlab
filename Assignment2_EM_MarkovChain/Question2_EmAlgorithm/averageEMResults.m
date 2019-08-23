@@ -43,7 +43,7 @@ function [avgMU, avgSIGMA, avgPI] = averageEMResults(B, givenMUs, givenSIGMAs, N
 
         %% Step 2: do the EM algorithm
         [MU, SIGMA, PI] = EMAlgo(X, phi, K);
-        %[MU, SIGMA, PI] = EMAlgoGaussianMixture_1(X, phi);
+        %[MU, SIGMA, PI] = EMAlgoGaussianMixture_1(X, phi, K);
         %[Mu, Sigma, Pi] = EMAlgoGaussianMixture_1(X, phi);
         
         allMUs{iter} = MU;
@@ -60,10 +60,19 @@ function [avgMU, avgSIGMA, avgPI] = averageEMResults(B, givenMUs, givenSIGMAs, N
     %% Step 3: Average the results
 
     % average all the mu's
-    m = cat(3, allMUs{:});
-    avgMU = mean(m, 3);
-    %m2 = cat(3, allmus{:});
-    %avgmu = mean(m2, 3);
+    %m = cat(3, allMUs{:});
+    %avgMU = mean(m, 3);
+    mk = cell(B, 1); 
+    
+    for k = 1:K
+        for b = 1:B
+            mk{b} = allMUs{b}{k};
+        end
+        
+        c = cat(3, mk{:});
+        avgMU{k} = mean(c, 3);
+        
+    end
     
     % average all the pi's
     p = cat(3, allPIs{:});

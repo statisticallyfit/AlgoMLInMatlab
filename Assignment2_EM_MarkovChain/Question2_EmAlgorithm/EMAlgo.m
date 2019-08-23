@@ -33,6 +33,7 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI, K)
    
     
     for k = 1:K
+        %MU{k} = centroids(k, :);
         % Get the row indices for which the cluster label matches current cluster k
         clusterRows = find(clusterLabels == k);
         % Get the data for the above row indices
@@ -46,9 +47,12 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI, K)
     % Repeat until no change in means.
     
     numIters = 0; % keep track of how many iterations it takes to achieve tolerance.
-    oldMU = zeros(K, D); 
+    oldMU = zeros(K, D);
+    %oldMU = cell(K, 1); %zeros(K, D); 
     
+    %for iter = 1:100
     while (sum(sum(abs(MU - oldMU))) > 1e-2)
+   % while (sum(cell2mat(MU) - cell2mat(oldMU)) > 1e-2)
         % (2) EXPECTATION STEP: 
     
         % evaluate the responsibilities using the current parameter values.
@@ -63,6 +67,7 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI, K)
         for k = 1 : K
 
             % Evaluate the Gaussian for all data points for cluster 'k'.
+            %pdf(:, k) = mvnpdf(X, MU{k}, SIGMA{k});
             pdf(:, k) = mvnpdf(X, MU(k, :), SIGMA{k});
             % note: sum(..., 2) means sum along the rows, so result of sum is
             % N x 1 matrix
@@ -93,8 +98,13 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI, K)
         for k = 1 : K
             % Calculate the new mean for cluster 'j' by taking the weighted
             % average of all data points.
-            MU(k, :) = (transpose(resp(:, k)) * X) ./ sum(resp(:, k), 1);  %weightedAverage(resp(:, k), X);
+            MU(k, :) = (resp(:, k)' * X) ./ sum(resp(:, k), 1);  %weightedAverage(resp(:, k), X);
 
+            %MU{k} = (transpose(resp(:, k)) * X) ./ sum(resp(:, k), 1);
+            fprintf('k = %d \n', k);
+            disp('mu_k');
+            disp(MU(k, :));
+            
             % Calculate the covariance matrix for cluster 'k' by taking the 
             % weighted average of the covariance for each training example. 
 
@@ -102,7 +112,8 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI, K)
 
             % Subtract the cluster row mean vector from all data points.
             Xm = X - MU(k,:); % bsxfun(@minus, X, MU(k, :)); % applies minus elementwise  to X. 
-
+            %Xm = X - MU{k};
+            
             sigma_k = zeros(D, D);
             % Calculate the contribution of each training example to the covariance matrix.
             for (n = 1 : N)
@@ -119,5 +130,5 @@ function [MU, SIGMA, PI] = EMAlgo(X, PI, K)
     end
     
     
-    %fprintf('Num iterations in EM algo: %d \n', numIters);
+    fprintf('Num iterations in EM algo: %d \n', numIters);
 end

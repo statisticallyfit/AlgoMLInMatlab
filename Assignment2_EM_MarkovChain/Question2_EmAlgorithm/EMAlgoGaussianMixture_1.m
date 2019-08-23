@@ -6,14 +6,14 @@
 % sigma_k = the covariance matrix for the kth Gaussian
 % phi_k = the mixing probability for the kth gaussian
 % X = data matrix
-function [mu, sigma, phi] = EMAlgoGaussianMixture_1(X, phi)
+function [mu, sigma, phi] = EMAlgoGaussianMixture_1(X, phi, K)
 
     % (1) Initialize the vector of means, covariance matrix, and prior
     % probabilities for all K=2 components (all K=2 gaussian mixtures)
     
     N = size(X, 1);
 
-    K = 2;  % The number of clusters.
+    %K = 2;  % The number of clusters.
     D = 2;  % The vector lengths.
 
     % Randomly select k data points to serve as the initial means.
