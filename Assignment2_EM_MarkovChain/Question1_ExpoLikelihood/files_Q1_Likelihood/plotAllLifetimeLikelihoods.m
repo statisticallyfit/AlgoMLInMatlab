@@ -10,7 +10,7 @@ function plotAllLifetimeLikelihoods(x1, x2, x3, thetaMin, thetaMax)
     lik = @(theta, x) (1 ./ theta .^2) .* x .* exp(-x ./ theta);
     
     % Plotting the likelihood for a single given 'x'
-    figure(1); clf;
+    figure(2); clf;
     plot(thetas, lik(thetas, x1), 'r', 'LineWidth', 2)
     hold on;
     plot(thetas, lik(thetas, x2), 'b', 'LineWidth', 2)
