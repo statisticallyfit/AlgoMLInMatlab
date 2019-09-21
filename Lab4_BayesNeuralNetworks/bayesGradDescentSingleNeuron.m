@@ -1,5 +1,6 @@
 % PARAMETERS of algorithm: 
 % eta = learning rate (hyperparameter)
+% alpha = weight decay rate
 % I = number of weights
 % N = number of data samples. 
 % X = the N x I matrix containing N input vectors on the rows, each of length I
@@ -14,9 +15,14 @@
 % X, t
 % I
 
-% GOAL: using batch learning, simple gradient descent to compute the
+% GOAL: using batch learning, BAYESIAN gradient descent to compute the
 % optimal weights of the single neuron network. 
-function w = singleNeuronGradientDescent(X, t, eta)
+% The only update from single neuron descent algo is the weight
+% regularization step in the delta W step. 
+
+% The result is W_MAP (the weights maximized under the posterior)
+
+function wMAP = bayesGradDescentSingleNeuron(X, t, eta, alpha)
 
     %% STEP 1: Initialization
     [~, I] = size(X);
@@ -38,11 +44,20 @@ function w = singleNeuronGradientDescent(X, t, eta)
         %% STEP 3: Learning rule: for each target value t(n), find the error signal
         % and adjust the weights: 
         e = y - t; % t = N x 1, y is N x 1 vector
-        grad = transpose(X) * e; 
-        deltaW = - eta * grad;  % not using weight-dcay regularization
+        
+        % compute gradient of object function G(w)
+        gradG = transpose(X) * e;  
+        
+        % Compute gradient of new objective function from weight-decay regularization: M(w) 
+        gradM = gradG + alpha * w;
+        
+        % Now the change in W is this: -eta*(gradG + alpha * w)
+        deltaW = - eta * gradM;  
         
         % Updating the weights (and bias)
         w = w + deltaW;
+    end 
+    
+    wMAP = w; 
+    
 end
-
-
