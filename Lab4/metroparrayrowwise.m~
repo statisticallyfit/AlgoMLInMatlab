@@ -1,16 +1,16 @@
-function [Wstored, Windep] = tempschool(X, t, proposalWidth)
+function [Wstored, Windep] = metroparrayrowwise(X, t, proposalWidth)
     % Metropolis algorithm (lab solution)
     % note: I adapted for W to be I x 1 vector not 1 x I as in lab solution
 
     rng('default')
 
     % Define posterior distribution for W
-    alpha = 0.01;
-    y = @(W) sigmoid(W * X');  %N x 1
-    G = @(W) -(t' * log(y(W)' )  + (1-t') * log(1 - y(W))' );  % 1x1
-    E = @(W) sum(W .^ 2) / 2;  %sum(W.^2, 2)' / 2  % 1x1
-    M = @(W) G(W) + alpha * E(W) ;
-    Pstar = @(W) exp(-M(W)); % 1x1
+    %alpha = 0.01;
+    %y = @(W) sigmoid(W * X');  %N x 1
+    %G = @(W) -(t' * log(y(W)' )  + (1-t') * log(1 - y(W))' );  % 1x1
+    %E = @(W) sum(W .^ 2) / 2;  %sum(W.^2, 2)' / 2  % 1x1
+    %M = @(W) G(W) + alpha * E(W) ;
+    %Pstar = @(W) exp(-M(W)); % 1x1
 
     
     [N, I] = size(X); 

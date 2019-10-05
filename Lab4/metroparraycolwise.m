@@ -1,21 +1,17 @@
-function [Wstored, Windep] = metropmultivar(X, targets)
+function [Wstored, Windep] = metroparraycolwise(X, proposalWidth, Pstar)
     % Metropolis algorithm (lab solution)
     % note: I adapted for W to be I x 1 vector not 1 x I as in lab solution
 
     rng('default')
 
     % Define posterior distribution for W
-    alpha = 0.01;
-    proposalWidth = 0.1; 
-    
-    y = @(W) sigmoid(X * W);  %N x 1
-    G = @(W) -(targets' * log(y(W) )  + (1-targets)' * log(1 - y(W)) );  % 1x1
-    E = @(W) W'*W / 2;  %sum(W.^2, 2)' / 2  % 1x1
-    M = @(W) G(W) + alpha * E(W) ;
-    Pstar = @(W) exp(-M(W)); % 1x1
+    %alpha = 0.01;
+    %y = @(W) sigmoid(X * W);  %N x 1
+    %G = @(W) -(t' * log(y(W) )  + (1-t)' * log(1 - y(W)) );  % 1x1
+    %E = @(W) W'*W / 2;  %sum(W.^2, 2)' / 2  % 1x1
+    %M = @(W) G(W) + alpha * E(W) ;
+    %Pstar = @(W) exp(-M(W)); % 1x1
 
-    
-    numAccepted = 0; 
     
     [N, I] = size(X); 
 
@@ -23,25 +19,24 @@ function [Wstored, Windep] = metropmultivar(X, targets)
     lag = 2000;
     burnin = 10000;
     T = burnin + 30*lag;
-    
-    
-    Wstored_cell = repmat({ zeros(I, 1) }, T, 1);
-    
+    %proposalWidth = 0.1; 
     Wstored = zeros(T, I); 
+    numAccepted = 0; 
     W = [0; 0; 0];  % columnwise I x 1 vector of weights
+    Wstored(1, :) = W' ; 
 
 
     % Define proposal distribution and acceptance ratio
 
     % mean = W, sigma = diag of proposal size for gaussian
-    Qsample = @(w) mvnrnd(w, diag(proposalWidth * ones(I, 1)));
-    A = @(wQ, w) Pstar(wQ) / Pstar(w); 
+    Qsample = @(W) mvnrnd(W, diag(proposalWidth * ones(I, 1)));
+    A = @(Wprime, W) Pstar(Wprime) / Pstar(W); 
 
     % Loop T - 1 times
     for i = 1:T-1
         % must transpose qsample since it is rowwise 1 x I
-        wQ = Qsample(W)'; 
-        Avalue = A(wQ, W);
+        Wprime = Qsample(W)'; 
+        Avalue = A(Wprime, W);
 
         % Decide if to accept
         if Avalue >= 1
@@ -53,13 +48,12 @@ function [Wstored, Windep] = metropmultivar(X, targets)
         end
 
         if accept
-            %W = wQ;
-            Wstored(i + 1, :) = wQ'; 
+            W = Wprime;
         end
 
         numAccepted = numAccepted + accept; 
 
-        %Wstored(i+1, :) = W' ; 
+        Wstored(i+1, :) = W' ; 
 
     end
 
