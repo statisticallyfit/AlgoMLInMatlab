@@ -7,32 +7,33 @@
 load toy.dat
 [N, I] = size(toy)
 X = [ones(N, 1), toy(:, 1:2)]
-t = toy(:, 3) % targets is third column
-
+targets = toy(:, 3) % targets is third column
+proposalWidth = 0.1
 
 
 % Define posterior distribution for W
 alpha = 0.01
 y = @(W) sigmoid(X * W)  %N x 1
-G = @(W) -(t' * log(y(W) )  + (1-t)' * log(1 - y(W)) )  % 1x1
+G = @(W) -(targets' * log(y(W) )  + (1-targets)' * log(1 - y(W)) )  % 1x1
 E = @(W) W'*W / 2  %sum(W.^2, 2)' / 2  % 1x1
 M = @(W) G(W) + alpha * E(W) 
 Pstar = @(W) exp(-M(W)) % 1x1
-proposalWidth = 0.1
 
-[ws1, windep1] = tempmetropneuron(X, t, proposalWidth);
 
-ws1
+[wstored1, windep1] = tempmetropneuron(X, targets, proposalWidth);
+
+wstored1
 
 windep1
 
-windep2 = tempschool(X, t, proposalWidth);
+[wstored2, windep2] = tempschool(X, targets, proposalWidth);
 
+wstored2
 windep2 
 
-[ws3, windep3] = MetropolisMultivariateSampling(X, proposalWidth, Pstar);
+[wstored3, windep3] = MetropolisMultivariateSampling(X, proposalWidth, Pstar);
 
-ws3{:}
+wstored3{:}
 
 
 

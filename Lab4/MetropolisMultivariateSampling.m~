@@ -69,10 +69,8 @@ function [Wstored, indepSample] = MetropolisMultivariateSampling(X, targets)
     for t = 1:T-1
         % must transpose qsample since it is rowwise 1 x I
         
-        %wQ = transpose(   Qsample(  muQ(W{t}), sigmaQ)   ); 
-        %acceptanceProb = A(wQ, W{t});
-        wQ = transpose(   Qsample(  muQ(Wstored(t, :)' ), sigmaQ)   ); 
-        acceptanceProb = A(wQ, Wstored(t, :)' );
+        wQ = transpose(   Qsample(  muQ(W{t}), sigmaQ)   ); 
+        acceptanceProb = A(wQ, W{t});
 
         % Decide if to accept
         %unifNum = rand(); %generate uniform random number U between 0 <= U <= 1
@@ -91,9 +89,6 @@ function [Wstored, indepSample] = MetropolisMultivariateSampling(X, targets)
             Wstored(t + 1, :) = wQ'; 
             
             numAccepted = numAccepted + accept;
-        else 
-            W{t + 1} = W{t}; % old state
-            Wstored(t+1, :) = Wstored(t, :);
         end
         % if accept, then the new state is the proposal value
         %if acceptanceProb >= 1 || acceptanceProb > unifNum
