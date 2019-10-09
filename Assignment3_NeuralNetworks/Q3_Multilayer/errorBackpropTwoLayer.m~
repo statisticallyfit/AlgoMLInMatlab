@@ -6,13 +6,13 @@
 function [Whidden, Wout] = errorBackpropTwoLayer(X, H, t)
     
     % (1) INITIALIZE weights and biases
-    rng('default') % keeping the same seed makes decision boundary LINEAR - bad
+    %rng('default') % keeping the same seed makes decision boundary LINEAR - bad
     
     [N, I] = size(X);
     
     %H = 3; % num hidden units
-    Whidden = randi([0, 5], H, I); %rand(H, I);
-    Wout = randi([1, 3], 1, H+1); %rand(1, H + 1);
+    Whidden = rand(H, I);
+    Wout = rand(1, H + 1);
     
     T = 50000;
     eta = 0.01;
