@@ -38,11 +38,12 @@ function w = gradDescentSingleNeuron(X, t, eta)
         %% STEP 3: Learning rule: for each target value t(n), find the error signal
         % and adjust the weights: 
         e = y - t; % t = N x 1, y is N x 1 vector
-        grad = transpose(X) * e; 
-        deltaW = - eta * grad;  % not using weight-dcay regularization
+        gradG = transpose(X) * e; 
+        deltaW = - eta * gradG;  % not using weight-dcay regularization
         
         % Updating the weights (and bias)
         w = w + deltaW;
+    end
 end
 
 

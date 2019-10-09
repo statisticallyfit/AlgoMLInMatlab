@@ -22,12 +22,14 @@
 
 % The result is W_MAP (the weights maximized under the posterior)
 
-function wMAP = bayesGradDescentSingleNeuron(X, t, eta, alpha)
+function wMAP = gradDescentBayesSingleNeuron(X, t, eta, alpha)
 
     %% STEP 1: Initialization
     [~, I] = size(X);
-    w = rand(I, 1); 
-    %disp(w)
+    
+    w = [0, 1, 1]'; 
+    %w = rand(I, 1); 
+    
         
     NUM_ITER = 50000; 
     

@@ -6,11 +6,14 @@
 % N = number of samples
 % I = number of neuron inputs
 % alpha = weight decay learning rate (hyperparameter)
+% proposalWidth = needed for proposal sampling in metropolis montecarlo.
 
 %% ARGUMENTS to function: 
-% X
-% t
-% alpha, eta
+% X = size N x I matrix with training data. 
+% testX: a matrix much longer than X, and is usually M x I, where M is
+% large number, and I = dimension of X
+% targets = targets vector is N x 1
+
 
 %% OUTPUT of function: 
 % weightIndepSample = the T x 1 cell array of I x 1 independent weight vectors sampled 
@@ -23,20 +26,24 @@
 % weight value w_MAP under posterior (like in the other single neuron bayes
 % file)
 
-function probTargetIsOne = bayesTargetProbabilityForSingleNeuron(X, t, alpha)
+function probTargetIsOne = targetProbBayesSingleNeuron(X, targets, testX)
 
     % Define posterior distribution for W
-    
-    y = @(w) sigmoid(X * w);  %N x 1
-    G = @(w) -(t' * log(y(w) )  + (1-t)' * log(1 - y(w)) );  % 1x1
-    E = @(w) w' * w / 2;  %sum(W.^2, 2)' / 2  % 1x1
-    M = @(w) G(w) + alpha * E(w) ;
-    Pstar = @(w) exp(-M(w)); % 1x1
+    alpha = 0.01; 
+    y = @(W) sigmoid(X * W);  %N x 1
+    G = @(W) -(targets' * log(y(W) )  + (1-targets)' * log(1 - y(W)) );  % 1x1
+    E = @(W) W'*W / 2;  %sum(W.^2, 2)' / 2  % 1x1
+    M = @(W) G(W) + alpha * E(W) ;
+    Pstar = @(W) exp(-M(W)); % 1x1
 
     % Metropolis algorithm 
     proposalWidth = 0.1; 
-    weightsIndepSample = MetropolisMultivariateSampling(X, proposalWidth, Pstar);
+    [~, weightsIndep] = MetropolisMultivariateSampling(X, proposalWidth, Pstar);
     
-    % learned y part ... TODO
+    % learned y part : calculate predicted probabilities of targets = 1
+    % testX = M x I
+    % weightsIndep = R x I, where R = number of independent samples. 
+    
+    probTargetIsOne = mean( sigmoid(weightsIndep * testX') );
 
 end

@@ -1,6 +1,4 @@
-% Using just matrices, no cells!
-
-function [weights, weightsIndep] = MetropolisMultivariateSampling(X, proposalWidth, Pstar)
+function [weights, weightsIndep] = MetropolisMultivariateSampling_cell(X, proposalWidth, Pstar)
     % Metropolis algorithm (lab solution)
     % note: I adapted for W to be I x 1 vector not 1 x I as in lab solution
 
@@ -15,8 +13,8 @@ function [weights, weightsIndep] = MetropolisMultivariateSampling(X, proposalWid
     
     [N, I] = size(X); 
     
-    weights = zeros(T, I); 
-    W = weights(1, :)';  % columnwise I x 1 vector of weights
+    weights = repmat({ zeros(I, 1) }, T, 1);
+    W = [0; 0; 0];  % columnwise I x 1 vector of weights
 
 
     % Define proposal distribution and acceptance ratio
@@ -49,7 +47,7 @@ function [weights, weightsIndep] = MetropolisMultivariateSampling(X, proposalWid
 
         numAccepted = numAccepted + accept; 
 
-        weights(t + 1, :) = W' ; % even if W is not updated to wQ, still put the old value here for storage.
+        weights{t + 1} = W; % even if W is not updated to wQ, still put the old value here for storage.
 
     end
 
@@ -59,5 +57,5 @@ function [weights, weightsIndep] = MetropolisMultivariateSampling(X, proposalWid
     
     % Selecting independent sample: starting from burning+lag, keep every lag(th)
     % sample until we hit T
-    weightsIndep = weights(burnin + lag : lag : T, :);
+    weightsIndep = { weights{burnin + lag: lag : T}  };
 end

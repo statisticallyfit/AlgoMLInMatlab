@@ -109,4 +109,3 @@ end
 yvar = (y-ybar)'*(y-ybar) ;
 
 ta2 = sum(cross_sum) / yvar ;
-
